@@ -27,4 +27,7 @@ definePageMeta({
   layout: 'default',
   middleware: 'auth'
 })
+onBeforeMount(() => console.log('onBeforeMount'))
+onMounted(() => console.log('Page / loaded'))
+
 </script>

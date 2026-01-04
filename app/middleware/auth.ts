@@ -1,45 +1,36 @@
 import { defineNuxtRouteMiddleware, navigateTo } from '#imports'
 
 export default defineNuxtRouteMiddleware((to, from) => {
+  // ONLY RUN ON SERVER-SIDE to prevent client-side flash/redirect issues
+  // If we're on the client side, the user is already authenticated (got past SSR middleware)
+  if (!import.meta.env.SSR) {
+    return // Skip client-side execution entirely
+  }
+
   // Check if the user is trying to access a protected route
   const protectedRoutes = ['/'] // Add more protected routes as needed
 
   if (protectedRoutes.includes(to.path)) {
-    // Check for access_token cookie - works on both server and client
+    // Check for access_token cookie on server side only
     const hasAuthToken = checkAuthToken()
 
     if (!hasAuthToken) {
       // Redirect to login page if not authenticated
-      // Use abortNavigation to prevent any rendering
-      // return abortNavigation('/login')
       return navigateTo('/login')
     }
   }
 })
 
 function checkAuthToken(): boolean {
-  // Try server-side cookie check first (for SSR)
-  if (import.meta.env.SSR) {
-    const cookies = useRequestHeaders(['cookie'])
-    const cookieHeader = cookies?.cookie || ''
-    return checkForAuthToken(cookieHeader)
-  }
+  // Only server-side execution now, so we can simplify
+  const cookies = useRequestHeaders(['cookie'])
+  const cookieHeader = cookies?.cookie || ''
 
-  // Client-side cookie check
-  if (!import.meta.env.SSR) {
-    // Check document.cookie on client side
-    return checkForAuthToken(document.cookie)
-  }
-
-  return false
-}
-
-function checkForAuthToken(cookieString: string): boolean {
-  if (!cookieString) return false
+  if (!cookieHeader) return false
 
   // Simple cookie parsing to check for access_token
-  const cookies = cookieString.split(';').map(c => c.trim())
-  const authCookie = cookies.find(c => c.startsWith('access_token='))
+  const cookiesArray = cookieHeader.split(';').map(c => c.trim())
+  const authCookie = cookiesArray.find(c => c.startsWith('access_token='))
 
   return !!authCookie
 }
