@@ -68,9 +68,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import Button from 'primevue/button'
-import Card from 'primevue/card'
 import { useClientsApi } from '~/composables/api/useClientsApi'
 import { useApi } from '~/composables/api/useApi'
 
@@ -102,13 +99,11 @@ const testConnection = async () => {
   
   try {
     // Простой запрос для проверки соединения
-    // const { $api } = useApi()
     const api = useApi()
     const authResult = await api.post('/auth/login', {
       email: 'admin@example.com',
       password: 'password',
     })
-    // await $api('/clients')
     connectionStatus.value = 'connected'
     lastResponse.value = new Date().toLocaleTimeString()
   } catch (err: any) {
