@@ -10,6 +10,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
     if (!hasAuthToken) {
       // Redirect to login page if not authenticated
+      // Use abortNavigation to prevent any rendering
+      // return abortNavigation('/login')
       return navigateTo('/login')
     }
   }

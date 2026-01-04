@@ -1,14 +1,13 @@
 <template>
   <div>
     <!-- Убираем NuxtWelcome и создаём свою структуру -->
-    <AppLayout>
+    <NuxtLayout>
       <NuxtPage />
-    </AppLayout>
+    </NuxtLayout>
     <NuxtRouteAnnouncer />
   </div>
 </template>
 
 <script setup lang="ts">
-// Импортируем наш layout
-import AppLayout from '~/layouts/default.vue'
+// Используем NuxtLayout для поддержки разных layouts
 </script>

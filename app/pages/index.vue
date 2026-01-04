@@ -6,13 +6,13 @@
     
     <!-- Пока просто кнопки для навигации -->
     <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <NuxtLink to="/clients" class="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+      <NuxtLink to="/" class="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
         <h2 class="text-lg font-semibold">Клиенты</h2>
         <p class="text-gray-500">Управление клиентами и договорами</p>
         <Button label="Verify" />
       </NuxtLink>
       
-      <NuxtLink to="/calendar" class="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
+      <NuxtLink to="/" class="p-6 bg-white rounded-lg shadow hover:shadow-md transition">
         <h2 class="text-lg font-semibold">Календарь отчётности</h2>
         <p class="text-gray-500">Сроки сдачи отчётов</p>
       </NuxtLink>
@@ -24,6 +24,7 @@
 <script setup lang="ts">
 // Dashboard page - main authenticated page
 definePageMeta({
+  layout: 'default',
   middleware: 'auth'
 })
 </script>

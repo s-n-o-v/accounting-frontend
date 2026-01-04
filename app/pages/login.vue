@@ -2,7 +2,7 @@
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h1 class="text-2xl font-bold text-center mb-6 text-black">Вход в систему</h1>
+      <h1 class="text-2xl font-bold text-center mb-6">Вход в систему</h1>
 
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
@@ -54,7 +54,16 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import InputText from 'primevue/inputtext'
+import Password from 'primevue/password'
+import Checkbox from 'primevue/checkbox'
+import Button from 'primevue/button'
 import { useApi } from '~/composables/api/useApi'
+
+definePageMeta({
+  layout: 'empty' // Use empty layout instead of false
+})
 
 const email = ref('admin@example.com')
 const password = ref('password')
@@ -75,7 +84,7 @@ const handleLogin = async () => {
     })
 
     // Login successful, redirect to dashboard
-    await navigateTo('/')
+    window.location.href = '/' // Use direct navigation to ensure full page reload
   } catch (err: any) {
     error.value = err.statusCode !== 401 ? err.message : 'Ошибка авторизации. Проверьте email и пароль.'
     console.error('Login error:', err)
