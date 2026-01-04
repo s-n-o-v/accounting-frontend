@@ -29,16 +29,16 @@
 }
 
 .dark {
-  // Dark theme overrides
+  // Dark theme overrides - use Aura dark theme variables
   --primary-color: var(--px-primary-400);
   --primary-hover: var(--px-primary-300);
-  --surface-ground: var(--px-surface-ground-dark);
-  --surface-section: var(--px-surface-section-dark);
-  --surface-card: var(--px-surface-card-dark);
-  --surface-border: var(--px-surface-border-dark);
-  --text-primary: var(--px-text-primary-dark);
-  --text-secondary: var(--px-text-secondary-dark);
-  --text-muted: var(--px-text-muted-dark);
+  --surface-ground: var(--px-surface-0);
+  --surface-section: var(--px-surface-50);
+  --surface-card: var(--px-surface-100);
+  --surface-border: var(--px-surface-200);
+  --text-primary: var(--px-text);
+  --text-secondary: var(--px-text-secondary);
+  --text-muted: var(--px-text-muted);
 }
 
 // Base styles
@@ -48,6 +48,11 @@ body {
   background-color: var(--surface-ground);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Debug: Add border to see theme changes clearly
+.bg-surface {
+  border: 2px solid var(--primary-color) !important;
 }
 
 // Theme-aware utility classes
