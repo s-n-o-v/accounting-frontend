@@ -1,5 +1,3 @@
-import { defineEventHandler, readBody } from 'h3'
-import { createError } from 'h3'
 import { proxyRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {

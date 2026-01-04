@@ -1,4 +1,3 @@
-import { defineEventHandler } from 'h3'
 import { proxyRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {

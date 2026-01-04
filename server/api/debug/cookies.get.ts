@@ -1,5 +1,3 @@
-import { defineEventHandler } from 'h3'
-
 export default defineEventHandler(async (event) => {
   // Get cookies from the request
   const cookies = event.node.req.headers.cookie || ''

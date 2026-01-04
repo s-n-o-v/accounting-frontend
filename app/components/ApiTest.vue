@@ -6,11 +6,11 @@
       <div class="space-y-4">
         <!-- Статус подключения -->
         <div class="flex items-center space-x-3">
-          <div 
+          <div
             :class="[
               'w-3 h-3 rounded-full animate-pulse',
-              connectionStatus === 'connected' ? 'bg-green-500' : 
-              connectionStatus === 'error' ? 'bg-red-500' : 'bg-yellow-500'
+              connectionStatus === 'connected' ? 'bg-success' :
+              connectionStatus === 'error' ? 'bg-danger' : 'bg-warning'
             ]"
           ></div>
           <span class="font-medium">
@@ -41,10 +41,10 @@
         <!-- Результаты -->
         <div v-if="clients.length > 0" class="mt-4">
           <h4 class="font-semibold mb-2">Клиенты ({{ clients.length }})</h4>
-          <div class="bg-gray-50 rounded p-3 max-h-60 overflow-y-auto">
+          <div class="bg-surface rounded p-3 max-h-60 overflow-y-auto">
             <div v-for="client in clients" :key="client.id" class="py-2 border-b last:border-b-0">
               <div class="font-medium">{{ client.short_name }}</div>
-              <div class="text-sm text-gray-600">
+              <div class="text-sm text-muted">
                 ИНН: {{ client.inn }} | Статус: {{ client.status }}
               </div>
             </div>
@@ -52,13 +52,13 @@
         </div>
 
         <!-- Ошибки -->
-        <div v-if="error" class="p-3 bg-red-50 border border-red-200 rounded">
-          <div class="font-medium text-red-800">Ошибка:</div>
-          <div class="text-red-700 text-sm">{{ error }}</div>
+        <div v-if="error" class="p-3 bg-danger bg-opacity-10 border border-danger border-opacity-20 rounded">
+          <div class="font-medium text-danger">Ошибка:</div>
+          <div class="text-danger text-sm">{{ error }}</div>
         </div>
 
         <!-- Информация о API -->
-        <div class="text-sm text-gray-500 pt-2 border-t">
+        <div class="text-sm text-muted pt-2 border-t">
           <div>Base URL: {{ apiBaseUrl }}</div>
           <div v-if="lastResponse">Последний ответ: {{ lastResponse }}</div>
         </div>

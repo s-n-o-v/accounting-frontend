@@ -1,12 +1,12 @@
 <!-- pages/login.vue -->
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+  <div class="min-h-screen flex items-center justify-center bg-surface">
+    <div class="bg-surface-card p-8 rounded-lg shadow-md w-full max-w-md border border-surface-border">
       <h1 class="text-2xl font-bold text-center mb-6">Вход в систему</h1>
 
       <form @submit.prevent="handleLogin" class="space-y-4">
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <label for="email" class="block text-sm font-medium text-primary mb-1">Email</label>
           <InputText
             id="email"
             v-model="email"
@@ -18,7 +18,7 @@
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Пароль</label>
+          <label for="password" class="block text-sm font-medium text-primary mb-1">Пароль</label>
           <Password
             id="password"
             v-model="password"
@@ -33,7 +33,7 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center">
             <Checkbox id="remember" v-model="rememberMe" :binary="true" class="mr-2" />
-            <label for="remember" class="text-sm text-gray-600">Запомнить меня</label>
+            <label for="remember" class="text-sm text-muted">Запомнить меня</label>
           </div>
         </div>
 
@@ -45,7 +45,7 @@
           severity="primary"
         />
 
-        <div v-if="error" class="p-3 bg-red-50 border border-red-200 rounded text-red-800 text-sm">
+        <div v-if="error" class="p-3 bg-danger bg-opacity-10 border border-danger border-opacity-20 rounded text-danger text-sm">
           {{ error }}
         </div>
       </form>

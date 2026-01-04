@@ -3,15 +3,99 @@
 @tailwind components;
 @tailwind utilities;
 
+// PrimeVue CSS is handled by the Nuxt module automatically
 // @import 'primevue/resources/primevue.css';
+// @import 'primevue/resources/themes/aura-light-blue/theme.css';
+// @import 'primevue/resources/themes/aura-dark-blue/theme.css';
 
-// // Ваши кастомные стили
-// :root {
-//   --primary-color: #3B82F6;
-//   --border-radius: 6px;
-// }
+// Theme variables and dark mode support
+:root {
+  // Light theme variables (default)
+  --primary-color: var(--px-primary-500);
+  --primary-hover: var(--px-primary-600);
+  --primary-text: var(--px-primary-contrast);
+  --surface-ground: var(--px-surface-ground);
+  --surface-section: var(--px-surface-section);
+  --surface-card: var(--px-surface-card);
+  --surface-border: var(--px-surface-border);
+  --text-primary: var(--px-text-primary);
+  --text-secondary: var(--px-text-secondary);
+  --text-muted: var(--px-text-muted);
+  --success-color: var(--px-green-500);
+  --warning-color: var(--px-yellow-500);
+  --danger-color: var(--px-red-500);
+  --info-color: var(--px-blue-500);
+  --border-radius: 6px;
+}
 
-// body {
-//   margin: 0;
-//   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-// }
+.dark {
+  // Dark theme overrides
+  --primary-color: var(--px-primary-400);
+  --primary-hover: var(--px-primary-300);
+  --surface-ground: var(--px-surface-ground-dark);
+  --surface-section: var(--px-surface-section-dark);
+  --surface-card: var(--px-surface-card-dark);
+  --surface-border: var(--px-surface-border-dark);
+  --text-primary: var(--px-text-primary-dark);
+  --text-secondary: var(--px-text-secondary-dark);
+  --text-muted: var(--px-text-muted-dark);
+}
+
+// Base styles
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background-color: var(--surface-ground);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Theme-aware utility classes
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-primary-hover:hover {
+  background-color: var(--primary-hover);
+}
+
+.text-primary {
+  color: var(--primary-text);
+}
+
+.bg-surface {
+  background-color: var(--surface-card);
+  border: 1px solid var(--surface-border);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+// Status colors using theme variables
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-danger {
+  background-color: var(--danger-color);
+}
+
+.bg-info {
+  background-color: var(--info-color);
+}
+
+// PrimeVue component overrides for better theme integration
+:root {
+  --px-datatable-header-background: var(--surface-section);
+  --px-card-background: var(--surface-card);
+  --px-card-border: var(--surface-border);
+}

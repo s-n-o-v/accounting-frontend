@@ -1,5 +1,3 @@
-import { defineEventHandler } from 'h3'
-
 export default defineEventHandler((event) => {
   // Set CORS headers for all responses
   event.node.res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000') // Allow frontend origin
