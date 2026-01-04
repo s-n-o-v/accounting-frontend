@@ -11,34 +11,34 @@
 // Theme variables and dark mode support
 :root {
   // Light theme variables (default)
-  --primary-color: var(--px-primary-500);
-  --primary-hover: var(--px-primary-600);
-  --primary-text: var(--px-primary-contrast);
-  --surface-ground: var(--px-surface-ground);
-  --surface-section: var(--px-surface-section);
-  --surface-card: var(--px-surface-card);
-  --surface-border: var(--px-surface-border);
-  --text-primary: var(--px-text-primary);
-  --text-secondary: var(--px-text-secondary);
-  --text-muted: var(--px-text-muted);
-  --success-color: var(--px-green-500);
-  --warning-color: var(--px-yellow-500);
-  --danger-color: var(--px-red-500);
-  --info-color: var(--px-blue-500);
+  --primary-color: var(--p-primary-500);
+  --primary-hover: var(--p-primary-600);
+  --primary-text: var(--p-primary-contrast);
+  --surface-ground: var(--p-surface-ground);
+  --surface-section: var(--p-surface-section);
+  --surface-card: var(--p-surface-card);
+  --surface-border: var(--p-surface-border);
+  --text-primary: var(--p-text-primary);
+  --text-secondary: var(--p-text-secondary);
+  --text-muted: var(--p-text-muted);
+  --success-color: var(--p-green-500);
+  --warning-color: var(--p-yellow-500);
+  --danger-color: var(--p-red-500);
+  --info-color: var(--p-blue-500);
   --border-radius: 6px;
 }
 
 .dark {
   // Dark theme overrides - use Aura dark theme variables
-  --primary-color: var(--px-primary-400);
-  --primary-hover: var(--px-primary-300);
-  --surface-ground: var(--px-surface-0);
-  --surface-section: var(--px-surface-50);
-  --surface-card: var(--px-surface-100);
-  --surface-border: var(--px-surface-200);
-  --text-primary: var(--px-text);
-  --text-secondary: var(--px-text-secondary);
-  --text-muted: var(--px-text-muted);
+  --primary-color: var(--p-primary-400);
+  --primary-hover: var(--p-primary-300);
+  --surface-ground: var(--p-surface-900);
+  --surface-section: var(--p-surface-800);
+  --surface-card: var(--p-surface-700);
+  --surface-border: var(--p-surface-600);
+  --text-primary: var(--p-text);
+  --text-secondary: var(--p-text-secondary);
+  --text-muted: var(--p-text-muted);
 }
 
 // Base styles
@@ -79,6 +79,33 @@ body {
 
 .text-muted {
   color: var(--text-muted);
+}
+
+// Logo styles for dark/light theme
+.bg-primary-400 {
+  background-color: var(--p-primary-400);
+}
+
+.dark:text-surface-900 {
+  color: var(--p-surface-900);
+}
+
+// Surface variants for better contrast
+.bg-surface-50 {
+  background-color: var(--p-surface-50);
+}
+
+.bg-surface-100 {
+  background-color: var(--p-surface-100);
+}
+
+// Adaptive header background for dark/light theme
+.bg-header {
+  background-color: var(--p-surface-50);
+}
+
+.dark .bg-header {
+  background-color: var(--p-surface-800);
 }
 
 // Status colors using theme variables

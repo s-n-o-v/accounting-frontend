@@ -1,10 +1,8 @@
 <!-- layouts/default.vue -->
 <template>
   <div class="min-h-screen flex flex-col">
-    <!-- Header with theme toggle -->
-    <header class="bg-surface border-b border-surface-border p-4 flex justify-end">
-      <ThemeToggle />
-    </header>
+    <!-- Top menu with logo, project name, theme toggle and user menu -->
+    <TopMenu />
 
     <div class="flex flex-1">
       <!-- Sidebar будет здесь -->
@@ -17,5 +15,5 @@
 </template>
 
 <script setup lang="ts">
-import ThemeToggle from '../components/ui/ThemeToggle.vue'
+import TopMenu from '../components/layout/TopMenu.vue'
 </script>
