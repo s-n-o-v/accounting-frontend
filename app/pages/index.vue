@@ -1,6 +1,6 @@
 <!-- pages/index.vue -->
 <template>
-  <div>
+  <div class="bg-header p-4 rounded-lg">
     <h1 class="text-2xl font-bold mb-6">Дашборд бухгалтерского учёта</h1>
     <p class="text-muted">Здесь будет ваша панель управления с виджетами</p>
 

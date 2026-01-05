@@ -81,6 +81,15 @@ body {
   color: var(--text-muted);
 }
 
+.bg-surface-hover:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.1);
+}
+
+// Primary color RGB for hover effects
+:root {
+  --primary-color-rgb: 59, 130, 246; /* Default blue, will be overridden by actual theme */
+}
+
 // Logo styles for dark/light theme
 .bg-primary-400 {
   background-color: var(--p-primary-400);

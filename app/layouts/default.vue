@@ -5,8 +5,11 @@
     <TopMenu />
 
     <div class="flex flex-1">
-      <!-- Sidebar будет здесь -->
-      <main class="flex-1 p-6">
+      <!-- Sidebar -->
+      <Sidebar />
+
+      <!-- Main content -->
+      <main class="flex-1 py-4 pr-4 overflow-auto">
         <slot />
       </main>
     </div>
@@ -16,4 +19,5 @@
 
 <script setup lang="ts">
 import TopMenu from '../components/layout/TopMenu.vue'
+import Sidebar from '../components/layout/Sidebar.vue'
 </script>
