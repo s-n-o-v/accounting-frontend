@@ -13,103 +13,35 @@
       <!-- Элементы меню -->
       <nav class="flex-1 overflow-y-auto">
         <ul class="space-y-1">
-          <li>
-            <NuxtLink
-              to="/clients"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-users text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Клиенты</span>
-            </NuxtLink>
-          </li>
+          <!-- Динамическое меню из конфигурации -->
+          <template v-for="menuGroup in sidebarMenu" :key="menuGroup.id">
+            <!-- Заголовок группы или разделитель -->
+            <li class="menu-group-header">
+              <div v-if="isExpanded" class="flex items-center space-x-3 p-3">
+                <span class="text-surface-500 dark:text-surface-300 font-medium text-sm">
+                  {{ menuGroup.label }}
+                </span>
+              </div>
+              <div v-else class="menu-group-divider"></div>
+            </li>
 
-          <li>
-            <NuxtLink
-              to="/calendar"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-calendar text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Календарь</span>
-            </NuxtLink>
-          </li>
-
-          <li>
-            <NuxtLink
-              to="/reports"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-chart-bar text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Отчеты</span>
-            </NuxtLink>
-          </li>
-
-          <li>
-            <NuxtLink
-              to="/services"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-cog text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Услуги</span>
-            </NuxtLink>
-          </li>
-
-          <li>
-            <NuxtLink
-              to="/finance"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-dollar text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Финансы</span>
-            </NuxtLink>
-          </li>
-
-          <li>
-            <NuxtLink
-              to="/directory"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-book text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Справочники</span>
-            </NuxtLink>
-          </li>
-
-          <li>
-            <NuxtLink
-              to="/settings"
-              class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
-              :class="{
-                'justify-center': !isExpanded,
-                'hover:bg-surface-hover': isExpanded
-              }"
-            >
-              <i class="pi pi-sliders-h text-primary text-lg" />
-              <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">Настройки</span>
-            </NuxtLink>
-          </li>
+            <!-- Элементы группы -->
+            <li v-for="item in menuGroup.items" :key="item.id">
+              <NuxtLink
+                :to="item.to"
+                class="menu-item flex items-center space-x-3 p-3 rounded transition-all duration-200"
+                :class="{
+                  'justify-center': !isExpanded,
+                  'hover:bg-surface-hover': isExpanded,
+                  '!pl-3': isExpanded,
+                  '!py-[4px]': !isExpanded,
+                }"
+              >
+                <i :class="item.icon + ' text-primary text-lg'" />
+                <span v-if="isExpanded" class="text-surface-700 dark:text-surface-200">{{ item.label }}</span>
+              </NuxtLink>
+            </li>
+          </template>
         </ul>
       </nav>
     </div>
@@ -118,7 +50,8 @@
 
 <script setup lang="ts">
 import { useSidebarStore } from '../../stores/sidebar'
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
+import { sidebarMenu } from '../../config/sidebarMenu'
 
 const sidebarStore = useSidebarStore()
 const isExpanded = ref(sidebarStore.isExpanded)
@@ -137,6 +70,8 @@ watch(() => sidebarStore.isExpanded, (newVal) => {
 
 .menu-item {
   transition: all 0.2s ease;
+  padding: 0;
+  min-height: 36px;
 }
 
 .menu-item:hover {
@@ -149,6 +84,31 @@ watch(() => sidebarStore.isExpanded, (newVal) => {
 
 .menu-item:hover span {
   color: var(--primary-color);
+}
+
+.menu-item span {
+  font-size: 14px !important;
+}
+
+.menu-group-header {
+  /* padding: 0 12px; */
+  margin: 8px 0 4px 0;
+}
+
+.menu-group-header span {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  transition: opacity 0.2s ease;
+}
+
+.menu-group-divider {
+  height: 1px;
+  background-color: var(--surface-border);
+  margin: 12px 8px;
+  opacity: 0.5;
 }
 
 .toggle-button {
