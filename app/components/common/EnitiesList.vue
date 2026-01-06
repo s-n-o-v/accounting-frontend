@@ -2,7 +2,7 @@
 interface Props {
   columns: any[];
   actions: any[];
-  enitites: any;
+  entities: any;
   loading: boolean;
   hasCreate: boolean;
   title: string;
@@ -17,8 +17,8 @@ const emit = defineEmits<{
   (e: 'filter', keyword: string): void
 }>()
 
-const rowsCount = computed(() => props.enitites?.meta?.per_page ?? 0)
-const rowsTotal = computed(() => props.enitites?.meta?.total ?? 0)
+const rowsCount = computed(() => props.entities?.meta?.per_page ?? 0)
+const rowsTotal = computed(() => props.entities?.meta?.total ?? 0)
 const stateType = (id) => {
   switch (id) {
     case 1:
@@ -56,7 +56,7 @@ const actionsClick = (type: string, id: number) => {
         />
       </template>
     </Toolbar>
-    <DataTable :value="props.enitites?.data" tableStyle="min-width: 50rem">
+    <DataTable :value="props.entities?.data" tableStyle="min-width: 50rem">
       <template #header>
         <div class="flex flex-wrap gap-2 items-center justify-between">
           <span class="text-xl font-bold">{{ title }}</span>
@@ -72,10 +72,10 @@ const actionsClick = (type: string, id: number) => {
       >
         <template #body="slotProps">
           <Skeleton v-if="props.loading" />
-          <tamplate v-else>
+          <template v-else>
             <Badge v-if="col.type === 'badge'" :severity="stateType(slotProps.data.state.id)">{{ slotProps.data.state.name }}</Badge>
             <span v-else>{{ slotProps.data[col.key] }}</span>
-          </tamplate>
+          </template>
         </template>
       </Column>
       <Column v-if="props.actions?.length" :exportable="false" style="width: 12rem">

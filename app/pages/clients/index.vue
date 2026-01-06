@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useClientsApi, type Client } from '~/composables/api/useClientsApi'
 import type { PaginatedResponse } from '~/types/api/common'
 import { formatClientType, formatCurrency, formatDate, formatStatus, statusNum } from '~/utils/helpers/misc'
@@ -88,11 +90,11 @@ const actions = [
     icon: 'pi pi-trash',
     color: 'btn-danger',
     handler: async (client: Client) => {
-      if (confirm(`Вы уверены, что хотите удалить клиента ${client.full_name}?`)) {
+      if (confirm(`Вы уверены, что хотите удалить клиента ${client.name}?`)) {
         try {
           await clientsApi.deleteClient(client.id)
-          table.removeItem(client.id)
-          // Показать уведомление об успехе
+          // Обновляем список после удаления
+          await fetchClients()
           alert('Клиент успешно удален')
         } catch (error) {
           console.error('Ошибка при удалении клиента:', error)
@@ -129,14 +131,32 @@ onMounted(async () => {
   await fetchClients()
 })
 
+const router = useRouter()
+
 const onView = (id: string | number) => {
-  console.log('VEIW pressed', id)
+  router.push(`/clients/${id}`)
 }
+
 const onEdit = (id: string | number) => {
-  console.log('EDIT pressed', id)
+  router.push(`/clients/${id}/edit`)
 }
-const onDelete = (id: string | number) => {
-  console.log('DELETE pressed', id)
+
+const onDelete = async (id: string | number) => {
+  if (confirm('Вы уверены, что хотите удалить этого клиента?')) {
+    try {
+      await clientsApi.deleteClient(Number(id))
+      // Обновляем список после удаления
+      await fetchClients()
+      alert('Клиент успешно удален')
+    } catch (error) {
+      console.error('Ошибка при удалении клиента:', error)
+      alert('Не удалось удалить клиента')
+    }
+  }
+}
+
+const onCreate = () => {
+  router.push('/clients/new')
 }
 
 </script>
@@ -148,10 +168,10 @@ const onDelete = (id: string | number) => {
     :actions="actions"
     :has-create="true"
     :columns="columns"
-    :enitites="response"
+    :entities="response"
+    @create="onCreate"
     @view="onView"
     @edit="onEdit"
     @delete="onDelete"
   />
 </template>
-
