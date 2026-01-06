@@ -22,6 +22,11 @@ export interface ApiError {
   errors?: Record<string, string[]>
 }
 
+export interface StatusInterface {
+  name: string
+  id: number
+}
+
 export interface ApiRequestOptions {
   params?: Record<string, any>
   body?: any

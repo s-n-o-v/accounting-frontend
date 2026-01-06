@@ -1,4 +1,8 @@
-<!-- layouts/default.vue -->
+<script setup lang="ts">
+import TopMenu from '../components/layout/TopMenu.vue'
+import Sidebar from '../components/layout/Sidebar.vue'
+</script>
+
 <template>
   <div class="min-h-screen flex flex-col">
     <!-- Top menu with logo, project name, theme toggle and user menu -->
@@ -16,8 +20,3 @@
     <Toast />
   </div>
 </template>
-
-<script setup lang="ts">
-import TopMenu from '../components/layout/TopMenu.vue'
-import Sidebar from '../components/layout/Sidebar.vue'
-</script>

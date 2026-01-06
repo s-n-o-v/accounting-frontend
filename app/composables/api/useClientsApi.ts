@@ -2,16 +2,17 @@
 import { useApi } from './useApi'
 import type { 
   PaginatedResponse, 
-  QueryParams 
+  QueryParams, 
+  StatusInterface
 } from '~/types/api/common'
 
 // Тип клиента (пока базовая версия, позже расширим)
 export interface Client {
   id: number
   type: 'OOO' | 'IP' | 'AO' | 'NKO'
-  full_name: string
-  short_name: string
+  name: string
   inn: string
+  state?: StatusInterface
   kpp?: string
   status: 'active' | 'suspended' | 'closed'
   employee_count: number
@@ -22,8 +23,7 @@ export interface Client {
 
 export interface CreateClientDto {
   type: 'OOO' | 'IP' | 'AO' | 'NKO'
-  full_name: string
-  short_name: string
+  name: string
   inn: string
   kpp?: string
   address_legal: string
