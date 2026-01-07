@@ -7,10 +7,17 @@ export default defineNuxtRouteMiddleware((to, from) => {
     return // Skip client-side execution entirely
   }
 
-  // Check if the user is trying to access a protected route
-  const protectedRoutes = ['/'] // Add more protected routes as needed
+  // Use whitelist approach - only these routes are public, everything else requires auth
+  const publicRoutes = [
+    '/login',
+    '/register',      // Future registration page
+    '/forgot-password', // Future password recovery
+    '/reset-password', // Future password reset
+    '/api/auth/login' // API login endpoint
+  ]
 
-  if (protectedRoutes.includes(to.path)) {
+  // Check if the current route is NOT in the public routes list
+  if (!publicRoutes.includes(to.path)) {
     // Check for access_token cookie on server side only
     const hasAuthToken = checkAuthToken()
 

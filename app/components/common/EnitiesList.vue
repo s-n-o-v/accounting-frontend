@@ -30,17 +30,9 @@ const stateType = (id) => {
   }
 }
 
-const onCreate = () => {
-  emit('create')
-}
-const setPage = (e) => {
-  emit('page', e.page)
-  // console.log('setPage', e)
-}
-const actionsClick = (type: string, id: number) => {
-  emit(type, id)
-  // console.log('actionsClick', type, id);
-}
+const onCreate = () => emit('create')
+const setPage = (e) => emit('page', e.page)
+const actionsClick = (type: string, id: number) => emit(type, id)
 </script>
 
 <template>
@@ -56,12 +48,14 @@ const actionsClick = (type: string, id: number) => {
         />
       </template>
     </Toolbar>
-    <DataTable :value="props.entities?.data" tableStyle="min-width: 50rem">
+    <DataTable :value="props.entities?.data" :loading="props.loading" tableStyle="min-width: 50rem">
       <template #header>
         <div class="flex flex-wrap gap-2 items-center justify-between">
           <span class="text-xl font-bold">{{ title }}</span>
         </div>
       </template>
+      <template #loading> Данные загружаются. Пожалуйста подождите. </template>
+      <template #empty>Данные отсутствуют</template>
       <Column
         v-for="col of columns"
         :key="col.key"
@@ -71,11 +65,8 @@ const actionsClick = (type: string, id: number) => {
         :exportable="!!col.exportable"
       >
         <template #body="slotProps">
-          <Skeleton v-if="props.loading" />
-          <template v-else>
-            <Badge v-if="col.type === 'badge'" :severity="stateType(slotProps.data.state.id)">{{ slotProps.data.state.name }}</Badge>
-            <span v-else>{{ slotProps.data[col.key] }}</span>
-          </template>
+          <Badge v-if="col.type === 'badge'" :severity="stateType(slotProps.data.state.id)">{{ slotProps.data.state.name }}</Badge>
+          <span v-else>{{ slotProps.data[col.key] }}</span>
         </template>
       </Column>
       <Column v-if="props.actions?.length" :exportable="false" style="width: 12rem">

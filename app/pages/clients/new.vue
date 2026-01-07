@@ -3,6 +3,11 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useClientsApi, type CreateClientDto } from '~/composables/api/useClientsApi'
 
+definePageMeta({
+  layout: 'default',
+  middleware: 'auth'
+})
+
 const router = useRouter()
 const clientsApi = useClientsApi()
 

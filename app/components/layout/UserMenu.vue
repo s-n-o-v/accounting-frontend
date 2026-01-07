@@ -88,11 +88,34 @@ const navigateToSettings = () => {
   menu.value.hide()
 }
 
-const logout = () => {
-  // Логика выхода из системы
-  console.log('Logout clicked')
-  router.push('/login')
-  menu.value.hide()
+const logout = async () => {
+  try {
+    // Call the logout API endpoint to clear the cookie
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      credentials: 'include' // Important for cookies
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      console.log('Logout successful:', data.message)
+    } else {
+      console.error('Logout failed:', response.status)
+    }
+
+    // Redirect to login page after logout attempt
+    router.push('/login')
+  } catch (error) {
+    console.error('Logout error:', error)
+    // Redirect to login even if there's an error
+    router.push('/login')
+  } finally {
+    menu.value.hide()
+  }
 }
 </script>
 

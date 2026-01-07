@@ -5,6 +5,11 @@ import { useClientsApi, type Client } from '~/composables/api/useClientsApi'
 import type { PaginatedResponse } from '~/types/api/common'
 import { formatClientType, formatCurrency, formatDate, formatStatus, statusNum } from '~/utils/helpers/misc'
 
+definePageMeta({
+  layout: 'default',
+  middleware: 'auth'
+})
+
 const clientsApi = useClientsApi()
 const { getClients } = useClientsApi()
 
@@ -92,7 +97,7 @@ const actions = [
     handler: async (client: Client) => {
       if (confirm(`Вы уверены, что хотите удалить клиента ${client.name}?`)) {
         try {
-          await clientsApi.deleteClient(client.id)
+          await clientsApi.deleteClient(Number(client.id))
           // Обновляем список после удаления
           await fetchClients()
           alert('Клиент успешно удален')
