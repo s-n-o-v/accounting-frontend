@@ -43,7 +43,7 @@
           <h4 class="font-semibold mb-2">Клиенты ({{ clients.length }})</h4>
           <div class="bg-surface rounded p-3 max-h-60 overflow-y-auto">
             <div v-for="client in clients" :key="client.id" class="py-2 border-b last:border-b-0">
-              <div class="font-medium">{{ client.short_name }}</div>
+              <div class="font-medium">{{ client.name }}</div>
               <div class="text-sm text-muted">
                 ИНН: {{ client.inn }} | Статус: {{ client.status }}
               </div>
@@ -134,21 +134,22 @@ const fetchClients = async () => {
 // Создать тестового клиента
 const createTestClient = async () => {
   const testData = {
-    type: 'OOO' as const,
-    full_name: 'Тестовая компания ООО',
-    short_name: 'Тест ООО',
+    name: 'Тестовая компания ООО',
     inn: '1234567890',
-    address_legal: 'Тестовый адрес',
-    contact_phone: '+79990001122',
-    contact_email: 'test@example.com',
+    ogrn: '1234567890123',
+    legal_address: 'Тестовый адрес',
+    actual_address: 'Тестовый фактический адрес',
+    digital_signature_expires_at: '2025-12-31',
     employee_count: 5,
-    monthly_fee: 15000
+    foreign_employee_count: 0,
+    monthly_fee: 15000,
+    status: 'active' as const
   }
   
   try {
     const client = await createClient(testData)
     clients.value = [client, ...clients.value]
-    lastResponse.value = `Создан клиент: ${client.short_name}`
+    lastResponse.value = `Создан клиент: ${client.name}`
   } catch (err: any) {
     error.value = err.message || 'Ошибка при создании клиента'
   }

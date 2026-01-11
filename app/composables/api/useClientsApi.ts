@@ -6,31 +6,34 @@ import type {
   StatusInterface
 } from '~/types/api/common'
 
-// Тип клиента (пока базовая версия, позже расширим)
+// Тип клиента (обновлено в соответствии с Laravel моделью)
 export interface Client {
   id: number
-  type: 'OOO' | 'IP' | 'AO' | 'NKO'
   name: string
   inn: string
-  state?: StatusInterface
-  kpp?: string
+  ogrn?: string
+  legal_address?: string
+  actual_address?: string
+  digital_signature_expires_at?: string
+  employee_count?: number
+  foreign_employee_count?: number
+  monthly_fee?: number
   status: 'active' | 'suspended' | 'closed'
-  employee_count: number
-  monthly_fee: number
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
 }
 
 export interface CreateClientDto {
-  type: 'OOO' | 'IP' | 'AO' | 'NKO'
   name: string
   inn: string
-  kpp?: string
-  address_legal: string
-  contact_phone: string
-  contact_email: string
+  ogrn?: string
+  legal_address?: string
+  actual_address?: string
+  digital_signature_expires_at?: string
   employee_count?: number
+  foreign_employee_count?: number
   monthly_fee?: number
+  status?: 'active' | 'suspended' | 'closed'
 }
 
 export interface UpdateClientDto extends Partial<CreateClientDto> {

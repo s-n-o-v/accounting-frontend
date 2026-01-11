@@ -13,16 +13,16 @@ const clientsApi = useClientsApi()
 
 // Форма для создания клиента
 const form = ref<CreateClientDto>({
-  type: 'OOO',
-  full_name: '',
-  short_name: '',
+  name: '',
   inn: '',
-  kpp: '',
-  address_legal: '',
-  contact_phone: '',
-  contact_email: '',
+  ogrn: '',
+  legal_address: '',
+  actual_address: '',
+  digital_signature_expires_at: '',
   employee_count: 0,
-  monthly_fee: 0
+  foreign_employee_count: 0,
+  monthly_fee: 0,
+  status: 'active'
 })
 
 // Состояние загрузки
@@ -31,13 +31,8 @@ const error = ref<string | null>(null)
 
 // Валидация формы
 const validateForm = () => {
-  if (!form.value.full_name.trim()) {
-    error.value = 'Пожалуйста, укажите полное название'
-    return false
-  }
-
-  if (!form.value.short_name.trim()) {
-    error.value = 'Пожалуйста, укажите краткое название'
+  if (!form.value.name.trim()) {
+    error.value = 'Пожалуйста, укажите название'
     return false
   }
 
@@ -46,18 +41,8 @@ const validateForm = () => {
     return false
   }
 
-  if (form.value.type === 'OOO' && !form.value.kpp?.trim()) {
-    error.value = 'Для ООО обязательно указание КПП'
-    return false
-  }
-
-  if (!form.value.contact_phone.trim()) {
-    error.value = 'Пожалуйста, укажите контактный телефон'
-    return false
-  }
-
-  if (!form.value.contact_email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.contact_email.trim())) {
-    error.value = 'Пожалуйста, укажите корректный email'
+  if (!form.value.legal_address?.trim()) {
+    error.value = 'Пожалуйста, укажите юридический адрес'
     return false
   }
 
@@ -107,34 +92,13 @@ const cancel = () => {
 
       <div class="form-grid">
         <div class="form-group">
-          <label for="type">Тип клиента</label>
-          <select id="type" v-model="form.type" class="form-control">
-            <option value="OOO">ООО</option>
-            <option value="IP">ИП</option>
-            <option value="AO">АО</option>
-            <option value="NKO">НКО</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="full_name">Полное название</label>
+          <label for="name">Название</label>
           <input
-            id="full_name"
-            v-model="form.full_name"
+            id="name"
+            v-model="form.name"
             type="text"
             class="form-control"
-            placeholder="Полное название организации"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="short_name">Краткое название</label>
-          <input
-            id="short_name"
-            v-model="form.short_name"
-            type="text"
-            class="form-control"
-            placeholder="Краткое название"
+            placeholder="Название организации"
           >
         </div>
 
@@ -149,22 +113,22 @@ const cancel = () => {
           >
         </div>
 
-        <div class="form-group" v-if="form.type === 'OOO'">
-          <label for="kpp">КПП</label>
+        <div class="form-group">
+          <label for="ogrn">ОГРН</label>
           <input
-            id="kpp"
-            v-model="form.kpp"
+            id="ogrn"
+            v-model="form.ogrn"
             type="text"
             class="form-control"
-            placeholder="КПП"
+            placeholder="ОГРН"
           >
         </div>
 
         <div class="form-group">
-          <label for="address_legal">Юридический адрес</label>
+          <label for="legal_address">Юридический адрес</label>
           <textarea
-            id="address_legal"
-            v-model="form.address_legal"
+            id="legal_address"
+            v-model="form.legal_address"
             class="form-control"
             placeholder="Юридический адрес"
             rows="3"
@@ -172,24 +136,23 @@ const cancel = () => {
         </div>
 
         <div class="form-group">
-          <label for="contact_phone">Контактный телефон</label>
-          <input
-            id="contact_phone"
-            v-model="form.contact_phone"
-            type="tel"
+          <label for="actual_address">Фактический адрес</label>
+          <textarea
+            id="actual_address"
+            v-model="form.actual_address"
             class="form-control"
-            placeholder="Контактный телефон"
-          >
+            placeholder="Фактический адрес"
+            rows="3"
+          ></textarea>
         </div>
 
         <div class="form-group">
-          <label for="contact_email">Email</label>
+          <label for="digital_signature_expires_at">Срок действия ЭЦП</label>
           <input
-            id="contact_email"
-            v-model="form.contact_email"
-            type="email"
+            id="digital_signature_expires_at"
+            v-model="form.digital_signature_expires_at"
+            type="date"
             class="form-control"
-            placeholder="Email"
           >
         </div>
 
@@ -206,6 +169,18 @@ const cancel = () => {
         </div>
 
         <div class="form-group">
+          <label for="foreign_employee_count">Количество иностранных сотрудников</label>
+          <input
+            id="foreign_employee_count"
+            v-model.number="form.foreign_employee_count"
+            type="number"
+            class="form-control"
+            placeholder="Количество иностранных сотрудников"
+            min="0"
+          >
+        </div>
+
+        <div class="form-group">
           <label for="monthly_fee">Ежемесячный платеж (₽)</label>
           <input
             id="monthly_fee"
@@ -215,6 +190,15 @@ const cancel = () => {
             placeholder="Ежемесячный платеж"
             min="0"
           >
+        </div>
+
+        <div class="form-group">
+          <label for="status">Статус</label>
+          <select id="status" v-model="form.status" class="form-control">
+            <option value="active">Активный</option>
+            <option value="suspended">Приостановлен</option>
+            <option value="closed">Закрыт</option>
+          </select>
         </div>
       </div>
 
