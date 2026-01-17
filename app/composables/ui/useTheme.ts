@@ -41,6 +41,7 @@ export const useTheme = () => {
 
   // Initialize - set HTML class based on current theme (client-side only)
   watchEffect(() => {
+    // @ts-ignore
     if (process.client) {
       // Use toggle for simpler dark mode switching
       document.documentElement.classList.toggle('dark', currentTheme.value === 'dark')

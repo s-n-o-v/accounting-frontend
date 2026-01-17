@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useClientsApi, type Client } from '~/composables/api/useClientsApi'
 import type { PaginatedResponse } from '~/types/api/common'
 import { formatClientType, formatCurrency, formatDate, formatStatus, statusNum } from '~/utils/helpers/misc'
+
+// Тип для действий
+interface Action {
+  type: 'view' | 'edit' | 'delete'
+  label: string
+  icon: string
+  color: string
+  handler: (item: Client) => void
+}
 
 definePageMeta({
   layout: 'default',
@@ -16,6 +25,7 @@ const { getClients } = useClientsApi()
 const loading = ref<boolean>(false)
 const error = ref()
 const response = ref<PaginatedResponse<Client>>()
+
 // Определяем колонки для таблицы клиентов
 const columns = [
   {
@@ -70,7 +80,7 @@ const columns = [
 ]
 
 // Определяем действия для таблицы
-const actions = [
+const actions: Action[] = [
   {
     type: 'view',
     label: 'Просмотр',
@@ -100,10 +110,10 @@ const actions = [
           await clientsApi.deleteClient(Number(client.id))
           // Обновляем список после удаления
           await fetchClients()
-          alert('Клиент успешно удален')
+          console.log('Клиент успешно удален')
         } catch (error) {
           console.error('Ошибка при удалении клиента:', error)
-          alert('Не удалось удалить клиента')
+          console.log('Не удалось удалить клиента')
         }
       }
     }
@@ -117,20 +127,27 @@ const fetchClients = async () => {
   try {
     const apiResponse = await getClients({ per_page: 5 })
     response.value = apiResponse
-    response.value.data.forEach((row: Client) => {
-      row.created_at = formatDate(row.created_at)
-      row.monthly_fee = formatCurrency(row.monthly_fee)
-      row.state = {
-        id: statusNum(row.status),
-        name: formatStatus(row.status)
-      }
-    })
   } catch (err: any) {
     error.value = err.message || 'Ошибка при получении клиентов'
   } finally {
     loading.value = false
   }
 }
+
+// Вычисляемое свойство для форматированных данных клиентов
+const formattedClients = computed(() => {
+  if (!response.value?.data) return []
+  
+  return response.value.data.map(client => ({
+    ...client,
+    created_at: formatDate(client.created_at),
+    monthly_fee: formatCurrency(client.monthly_fee),
+    state: {
+      id: statusNum(client.status),
+      name: formatStatus(client.status)
+    }
+  }))
+})
 
 onMounted(async () => {
   await fetchClients()
@@ -152,10 +169,8 @@ const onDelete = async (id: string | number) => {
       await clientsApi.deleteClient(Number(id))
       // Обновляем список после удаления
       await fetchClients()
-      alert('Клиент успешно удален')
     } catch (error) {
       console.error('Ошибка при удалении клиента:', error)
-      alert('Не удалось удалить клиента')
     }
   }
 }
@@ -173,7 +188,7 @@ const onCreate = () => {
     :actions="actions"
     :has-create="true"
     :columns="columns"
-    :entities="response"
+    :entities="{...response, data: formattedClients}"
     @create="onCreate"
     @view="onView"
     @edit="onEdit"
