@@ -48,7 +48,7 @@ const actionsClick = (type: string, id: number) => emit(type, id)
         />
       </template>
     </Toolbar>
-    <DataTable :value="props.entities?.data" :loading="props.loading" tableStyle="min-width: 50rem">
+    <DataTable :value="props.entities?.data" size="small" :loading="props.loading" tableStyle="min-width: 50rem">
       <template #header>
         <div class="flex flex-wrap gap-2 items-center justify-between">
           <span class="text-xl font-bold">{{ title }}</span>

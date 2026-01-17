@@ -32,7 +32,7 @@ const error = ref<string | null>(null)
 
 // Загружаем данные агентства при монтировании
 onMounted(async () => {
-  loadAgency()
+  await loadAgency()
 })
 
 const loadAgency = async () => {
@@ -47,9 +47,9 @@ const loadAgency = async () => {
     loading.value = true
     const agency = await agenciesApi.getAgency(agencyId)
     formData.value = {
-      name: agency.name,
-      code: agency.code,
-      type: agency.type
+      name: agency.data?.name,
+      code: agency.data?.code,
+      type: agency.data?.type
     }
   } catch (err: any) {
     error.value = 'Не удалось загрузить данные агентства'
