@@ -109,6 +109,18 @@ export const sidebarMenu = [
         icon: "pi pi-fw pi-cog",
         to: "/directory/services",
       },
+      {
+        id: "report-types",
+        label: "Типы отчетов",
+        icon: "pi pi-fw pi-cog",
+        to: "/directory/report-types",
+      },
+      {
+        id: "agencies",
+        label: "Органы власти",
+        icon: "pi pi-fw pi-cog",
+        to: "/directory/agencies",
+      },
     ]
   },
   {
