@@ -30,6 +30,20 @@ const agencies = ref<Agency[]>([])
 const loading = ref(false)
 const submitting = ref(false)
 const error = ref<string | null>(null)
+const periodicityOptions = ref([
+  {
+    value: 'monthly',
+    label: 'Ежемесячный',
+  },
+  {
+    value: 'quarterly',
+    label: 'Ежеквартальный',
+  },
+  {
+    value: 'yearly',
+    label: 'Ежегодный',
+  },
+])
 
 // Загрузка агентств для выбора
 const loadAgencies = async () => {
@@ -105,8 +119,8 @@ onMounted(() => {
   <div class="card bg-header bg-surface-card rounded-lg p-4">
     <h2 class="text-xl font-bold mb-6">Новый тип отчетности</h2>
     
-    <form @submit.prevent="handleSubmit" class="p-fluid">
-      <div class="field mb-4">
+    <form @submit.prevent="handleSubmit" class="p-fluid form">
+      <div class="field">
         <label for="name" class="block text-sm font-medium mb-2">Наименование *</label>
         <InputText
           id="name"
@@ -118,62 +132,67 @@ onMounted(() => {
         <small v-if="validationErrors.name" class="block mt-1 text-red-500">{{ validationErrors.name }}</small>
       </div>
       
-      <div class="field mb-4">
-        <label for="code" class="block text-sm font-medium mb-2">Код *</label>
-        <InputText
-          id="code"
-          v-model="formData.code"
-          placeholder="Введите код типа отчетности"
-          :class="{ 'p-invalid': validationErrors.code }"
-          class="w-full"
-        />
-        <small v-if="validationErrors.code" class="block mt-1 text-red-500">{{ validationErrors.code }}</small>
+      <div class="row">
+        <div class="w-1/2">
+          <label for="code" class="block text-sm font-medium mb-2">Код *</label>
+          <InputText
+            id="code"
+            v-model="formData.code"
+            placeholder="Введите код типа отчетности"
+            :class="{ 'p-invalid': validationErrors.code }"
+            class="w-full"
+          />
+          <small v-if="validationErrors.code" class="block mt-1 text-red-500">{{ validationErrors.code }}</small>
+        </div>
+        <div class="w-1/2">
+          <label for="periodicity" class="block text-sm font-medium mb-2">Периодичность *</label>
+  
+          <Select
+            v-model="formData.periodicity"
+            :options="periodicityOptions"
+            optionLabel="label"
+            placeholder="Укажите периодичность"
+            fluid
+            :class="{ 'p-invalid': validationErrors.periodicity }"
+            class="w-full"
+          />
+          <small v-if="validationErrors.periodicity" class="block mt-1 text-red-500">{{ validationErrors.periodicity }}</small>
+        </div>
+      </div>
+     
+      <div class="row">
+        <div class="w-1/2">
+          <label for="deadline_day" class="block text-sm font-medium mb-2">День дедлайна</label>
+          <InputNumber
+            id="deadline_day"
+            v-model="formData.deadline_day"
+            placeholder="Введите день дедлайна"
+            class="w-full"
+            :min="1"
+            :max="31"
+          />
+        </div>
+        <div class="w-1/2">
+          <label for="month_offset" class="block text-sm font-medium mb-2">Смещение месяца</label>
+          <InputNumber
+            id="month_offset"
+            v-model="formData.month_offset"
+            placeholder="Введите смещение месяца"
+            class="w-full"
+            :min="0"
+          />
+        </div>
       </div>
       
-      <div class="field mb-4">
-        <label for="periodicity" class="block text-sm font-medium mb-2">Периодичность *</label>
-        <InputText
-          id="periodicity"
-          v-model="formData.periodicity"
-          placeholder="Введите периодичность (например, ежемесячно, ежеквартально)"
-          :class="{ 'p-invalid': validationErrors.periodicity }"
-          class="w-full"
-        />
-        <small v-if="validationErrors.periodicity" class="block mt-1 text-red-500">{{ validationErrors.periodicity }}</small>
-      </div>
-      
-      <div class="field mb-4">
-        <label for="deadline_day" class="block text-sm font-medium mb-2">День дедлайна</label>
-        <InputNumber
-          id="deadline_day"
-          v-model="formData.deadline_day"
-          placeholder="Введите день дедлайна"
-          class="w-full"
-          :min="1"
-          :max="31"
-        />
-      </div>
-      
-      <div class="field mb-4">
-        <label for="month_offset" class="block text-sm font-medium mb-2">Смещение месяца</label>
-        <InputNumber
-          id="month_offset"
-          v-model="formData.month_offset"
-          placeholder="Введите смещение месяца"
-          class="w-full"
-          :min="0"
-        />
-      </div>
-      
-      <div class="field mb-4">
-        <label for="agency_id" class="block text-sm font-medium mb-2">Агентство *</label>
+      <div class="field">
+        <label for="agency_id" class="block text-sm font-medium mb-2">Орган власти *</label>
         <Dropdown
           id="agency_id"
           v-model="formData.agency_id"
           :options="agencies"
           optionLabel="name"
           optionValue="id"
-          placeholder="Выберите агентство"
+          placeholder="Выберите орган власти"
           :class="{ 'p-invalid': validationErrors.agency_id }"
           class="w-full"
         />
@@ -181,7 +200,7 @@ onMounted(() => {
       </div>
       
       <!-- Сообщение об ошибке -->
-      <div v-if="error" class="field mb-4">
+      <div v-if="error" class="field">
         <Message severity="error">Не удалось загрузить данные. Пожалуйста, попробуйте позже.</Message>
       </div>
       
@@ -203,3 +222,16 @@ onMounted(() => {
     </form>
   </div>
 </template>
+
+<style scoped lang="scss">
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .row {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+  }
+</style>

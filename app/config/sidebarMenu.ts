@@ -101,7 +101,7 @@ export const sidebarMenu = [
         id: "directory-services",
         label: "Типы услуг",
         icon: "pi pi-fw pi-cog",
-        to: "/directory/services",
+        to: "/directory/service-types",
       },
       {
         id: "report-types",
