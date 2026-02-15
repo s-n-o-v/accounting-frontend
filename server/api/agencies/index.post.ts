@@ -2,5 +2,5 @@ import { proxyRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {
   // Use the proxy utility to forward the request
-  return proxyRequest(event, '/agencies', 'POST')
+  return proxyRequest(event, '/references/agencies', 'POST')
 })

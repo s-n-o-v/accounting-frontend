@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useReportTypesApi, type ReportType } from '~/composables/api/useReportTypesApi'
 import type { PaginatedResponse } from '~/types/api/common'
+import { reportPeriod } from './common'
 
 definePageMeta({
   layout: 'default',
@@ -125,9 +126,10 @@ const fetchReportTypes = async () => {
 // Вычисляемое свойство для форматированных данных типов отчетности
 const formattedReportTypes = computed(() => {
   if (!response.value?.data) return []
-  
+
   return response.value.data.map(reportType => ({
-    ...reportType
+    ...reportType,
+    periodicity: reportPeriod[reportType.periodicity],
   }))
 })
 

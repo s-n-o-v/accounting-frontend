@@ -5,5 +5,5 @@ export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
   
   // Use the proxy utility to forward the request
-  return proxyRequest(event, `/agencies/${id}`, 'GET')
+  return proxyRequest(event, `/references/agencies/${id}`, 'GET')
 })

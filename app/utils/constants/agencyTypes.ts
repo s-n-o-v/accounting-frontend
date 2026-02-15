@@ -6,8 +6,7 @@ export interface AgencyType {
 
 export const AGENCY_TYPES: AgencyType[] = [
   { name: "ifns", value: "ФНС" },
-  { name: "pfr", value: "ПФР" },
-  { name: "fss", value: "ФСС" }
+  { name: "sfr", value: "СФР" },
 ];
 
 // Функция для получения отображаемого значения по ключу

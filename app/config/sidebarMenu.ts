@@ -98,14 +98,8 @@ export const sidebarMenu = [
     label: "Справочники",
     items: [
       {
-        id: "directory-clients",
-        label: "Клиенты",
-        icon: "pi pi-fw pi-users",
-        to: "/directory/clients",
-      },
-      {
         id: "directory-services",
-        label: "Услуги",
+        label: "Типы услуг",
         icon: "pi pi-fw pi-cog",
         to: "/directory/services",
       },
