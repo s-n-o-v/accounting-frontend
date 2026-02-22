@@ -79,7 +79,7 @@ const actions: Action[] = [
     icon: 'pi pi-trash',
     color: 'btn-danger',
     handler: async (type: ServiceType) => {
-      if (confirm(`Вы уверены, что хотите удалить тип отчетности ${type.name}?`)) {
+      if (confirm(`Вы уверены, что хотите удалить тип услуги ${type.name}?`)) {
         try {
           await serviceTypesApi.deleteServiceType(Number(type.id))
           // Обновляем список после удаления

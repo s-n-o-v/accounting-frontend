@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useReportTypesApi } from '~/composables/api/useReportTypesApi'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useReportTypesApi, type ReportType } from '~/composables/api/useReportTypesApi'
 import { useAgenciesApi, type Agency } from '~/composables/api/useAgenciesApi'
-import { periodicityOptions } from './common'
+import { periodicityOptions } from '../common'
 
 definePageMeta({
   layout: 'default',
@@ -13,9 +13,10 @@ definePageMeta({
 const reportTypesApi = useReportTypesApi()
 const agenciesApi = useAgenciesApi()
 const router = useRouter()
+const route = useRoute()
 
 // Состояние формы
-const formData = ref({
+const formData = ref<Partial<ReportType>>({
   name: '',
   code: '',
   periodicity: '',
@@ -33,7 +34,12 @@ const submitting = ref(false)
 const error = ref<string | null>(null)
 // periodicityOptions импортируются из common.ts
 
-// Загрузка агентств для выбора
+// Загружаем данные типа отчетности при монтировании
+onMounted(async () => {
+  await loadAgencies()
+  await loadReportType()
+})
+
 const loadAgencies = async () => {
   loading.value = true
   try {
@@ -46,20 +52,48 @@ const loadAgencies = async () => {
   }
 }
 
+const loadReportType = async () => {
+  const reportTypeId = Number(route.params.id)
+  
+  if (isNaN(reportTypeId)) {
+    error.value = 'Неверный ID типа отчетности'
+    return
+  }
+
+  try {
+    loading.value = true
+    const reportType = await reportTypesApi.getReportType(reportTypeId)
+    
+    // Заполняем форму данными из полученного типа отчетности
+    formData.value = {
+      name: reportType.data?.name,
+      code: reportType.data?.code,
+      periodicity: reportType.data?.periodicity,
+      deadline_day: reportType.data?.deadline_day || 0,
+      month_offset: reportType.data?.month_offset || 0,
+      agency_id: reportType.data?.agency_id
+    }
+  } catch (err: any) {
+    error.value = 'Не удалось загрузить данные типа отчетности'
+  } finally {
+    loading.value = false
+  }
+}
+
 // Функция валидации формы
 const validateForm = (): boolean => {
   const errors: Record<string, string> = {}
   
   // Проверяем обязательные поля
-  if (!formData.value.name.trim()) {
+  if (!formData.value.name?.trim()) {
     errors.name = 'Наименование обязательно для заполнения'
   }
   
-  if (!formData.value.code.trim()) {
+  if (!formData.value.code?.trim()) {
     errors.code = 'Код обязателен для заполнения'
   }
   
-  if (!formData.value.periodicity.trim()) {
+  if (!formData.value.periodicity) {
     errors.periodicity = 'Периодичность обязательна для заполнения'
   }
   
@@ -78,15 +112,22 @@ const handleSubmit = async () => {
     return
   }
   
+  const reportTypeId = Number(route.params.id)
+  
+  if (isNaN(reportTypeId)) {
+    error.value = 'Неверный ID типа отчетности'
+    return
+  }
+
   submitting.value = true
   error.value = null
   
   try {
-    await reportTypesApi.createReportType(formData.value)
-    // Перенаправляем на страницу списка после успешного создания
+    await reportTypesApi.updateReportType(reportTypeId, formData.value)
+    // Перенаправляем на страницу списка после успешного обновления
     await router.push('/directory/report-types')
   } catch (err: any) {
-    error.value = 'Не удалось создать тип отчетности. Пожалуйста, проверьте данные и попробуйте снова.'
+    error.value = 'Не удалось обновить тип отчетности. Пожалуйста, проверьте данные и попробуйте снова.'
   } finally {
     submitting.value = false
   }
@@ -96,23 +137,22 @@ const handleSubmit = async () => {
 const handleCancel = () => {
   router.push('/directory/report-types')
 }
-
-// Загружаем агентства при монтировании
-onMounted(() => {
-  loadAgencies()
-})
 </script>
 
 <template>
-  <div class="card bg-header bg-surface-card rounded-lg p-4">
-    <h2 class="text-xl font-bold mb-6">Новый тип отчетности</h2>
+  <div v-if="loading" class="flex justify-center items-center h-64">
+    <ProgressSpinner />
+  </div>
+  
+  <div v-else class="card bg-header bg-surface-card rounded-lg p-4">
+    <h2 class="text-xl font-bold mb-6">Редактирование типа отчетности</h2>
     
     <form @submit.prevent="handleSubmit" class="p-fluid form">
       <div class="field">
         <label for="name" class="block text-sm font-medium mb-2">Наименование *</label>
         <InputText
           id="name"
-          v-model="formData.name"
+          v-model="formData.name" 
           placeholder="Введите наименование типа отчетности"
           :class="{ 'p-invalid': validationErrors.name }"
           class="w-full"
@@ -125,7 +165,7 @@ onMounted(() => {
           <label for="code" class="block text-sm font-medium mb-2">Код *</label>
           <InputText
             id="code"
-            v-model="formData.code"
+            v-model="formData.code" 
             placeholder="Введите код типа отчетности"
             :class="{ 'p-invalid': validationErrors.code }"
             class="w-full"
@@ -134,7 +174,7 @@ onMounted(() => {
         </div>
         <div class="w-1/2">
           <label for="periodicity" class="block text-sm font-medium mb-2">Периодичность *</label>
-  
+
           <Select
             v-model="formData.periodicity"
             :options="periodicityOptions"
@@ -189,7 +229,7 @@ onMounted(() => {
       
       <!-- Сообщение об ошибке -->
       <div v-if="error" class="field">
-        <Message severity="error">Не удалось загрузить данные. Пожалуйста, попробуйте позже.</Message>
+        <Message severity="error">{{ error }}</Message>
       </div>
       
       <!-- Кнопки управления -->
