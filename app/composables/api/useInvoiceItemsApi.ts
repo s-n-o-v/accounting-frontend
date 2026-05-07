@@ -78,7 +78,7 @@ export const useInvoiceItemsApi = () => {
     searchInvoiceItems: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<InvoiceItem>>(`/invoice-items/search${queryString}`)
+      return get<PaginatedResponse<InvoiceItem>>(`/invoice-items${queryString}`)
     }
   }
 }

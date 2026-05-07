@@ -1,4 +1,4 @@
-import { proxyRequest } from '../../utils/proxy'
+import { proxyApiRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {
   // Get request body with email and password
@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // Use the proxy utility to forward the login request
-  const response = await proxyRequest(event, '/auth/login', 'POST') as any
+  const response = await proxyApiRequest(event, '/auth/login', 'POST') as any
 
   // If we have an access_token in the response, set it as a cookie
   if (response?.access_token) {

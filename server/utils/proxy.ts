@@ -1,4 +1,4 @@
-export async function proxyRequest(event: any, targetPath: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS' = 'GET') {
+export async function proxyApiRequest(event: any, targetPath: string, method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS' = 'GET') {
   // Get the target URL from runtime config
   const config = useRuntimeConfig()
   const backendUrl = config.public.apiBaseUrl || 'http://localhost:8000/api'

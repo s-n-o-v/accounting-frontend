@@ -69,14 +69,14 @@ export const useClientReportsApi = () => {
 
     // Получить отчетности для конкретного типа отчетности
     getClientReportsByReportType: (reportTypeId: number) => {
-      return get<ClientReport[]>(`/report-types/${reportTypeId}/client-reports`)
+      return Promise.reject(new Error('Backend route /report-types/{id}/client-reports does not exist'))
     },
 
     // Поиск отчетностей клиентов
     searchClientReports: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<ClientReport>>(`/client-reports/search${queryString}`)
+      return get<PaginatedResponse<ClientReport>>(`/client-reports${queryString}`)
     }
   }
 }

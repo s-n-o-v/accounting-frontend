@@ -12,6 +12,7 @@ export interface ClientEmployee {
   full_name: string
   citizenship: string
   employment_type: string
+  position?: string
   hired_at?: string
   fired_at?: string
   created_at?: string
@@ -23,6 +24,7 @@ export interface CreateClientEmployeeDto {
   full_name: string
   citizenship: string
   employment_type: string
+  position?: string
   hired_at?: string
   fired_at?: string
 }
@@ -73,7 +75,7 @@ export const useClientEmployeesApi = () => {
     searchClientEmployees: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<ClientEmployee>>(`/client-employees/search${queryString}`)
+      return get<PaginatedResponse<ClientEmployee>>(`/client-employees${queryString}`)
     }
   }
 }

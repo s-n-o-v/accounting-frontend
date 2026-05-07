@@ -2,6 +2,12 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useClientsApi, type Client, type UpdateClientDto } from '~/composables/api/useClientsApi'
+import {
+  useClientEmployeesApi,
+  type ClientEmployee,
+  type CreateClientEmployeeDto
+} from '~/composables/api/useClientEmployeesApi'
+import ClientEmployeesEditor from '~/components/clients/ClientEmployeesEditor.vue'
 
 definePageMeta({
   layout: 'default',
@@ -9,6 +15,7 @@ definePageMeta({
 })
 
 const clientsApi = useClientsApi()
+const employeesApi = useClientEmployeesApi()
 const router = useRouter()
 const route = useRoute()
 
@@ -18,6 +25,10 @@ const statusOptions = [
   { value: 'Приостановлен', code: 'suspended' },
   { value: 'Закрыт', code: 'closed' }
 ]
+
+// Сотрудники клиента (сохраняются при нажатии «Сохранить» в форме)
+const employees = ref<ClientEmployee[]>([])
+const initialEmployeeIds = ref<number[]>([])
 
 // Состояние формы
 const formData = ref<UpdateClientDto & { status: string; digital_signature_expires_at: string | null }>({
@@ -122,6 +133,76 @@ const loadClient = async () => {
   } finally {
     loading.value = false
   }
+
+  if (!error.value) {
+    await loadEmployees()
+  }
+}
+
+// Нормализация сотрудника
+const normalizeEmployee = (raw: Record<string, unknown>): ClientEmployee => ({
+  id: Number(raw.id),
+  client_id: Number(raw.client_id),
+  full_name: String(raw.full_name ?? ''),
+  citizenship: String(raw.citizenship ?? 'russian'),
+  employment_type: String(raw.employment_type ?? 'staff'),
+  position: raw.position as string | undefined,
+  hired_at: raw.hired_at as string | undefined,
+  fired_at: raw.fired_at as string | undefined,
+  created_at: raw.created_at as string | undefined,
+  updated_at: raw.updated_at as string | undefined
+})
+
+// Загрузка сотрудников клиента
+const loadEmployees = async () => {
+  const clientId = Number(route.params.id)
+  if (isNaN(clientId)) return
+
+  try {
+    const response = await employeesApi.getClientEmployeesByClient(clientId)
+    const rawList = Array.isArray(response) ? response : (response as { data?: unknown[] }).data ?? []
+    employees.value = rawList.map((r: Record<string, unknown>) => normalizeEmployee(r))
+    initialEmployeeIds.value = employees.value.filter(e => e.id > 0).map(e => e.id)
+  } catch {
+    employees.value = []
+    initialEmployeeIds.value = []
+  }
+}
+
+// Сохранение сотрудников (вызывается при сохранении формы)
+const saveEmployees = async (clientId: number) => {
+  const currentIds = employees.value.filter(e => e.id > 0).map(e => e.id)
+  const toDelete = initialEmployeeIds.value.filter(id => !currentIds.includes(id))
+  const toCreate = employees.value.filter(e => e.id <= 0)
+  const toUpdate = employees.value.filter(e => e.id > 0)
+
+  for (const id of toDelete) {
+    await employeesApi.deleteClientEmployee(id)
+  }
+
+  for (const emp of toCreate) {
+    const payload: CreateClientEmployeeDto = {
+      client_id: clientId,
+      full_name: emp.full_name,
+      citizenship: emp.citizenship,
+      employment_type: emp.employment_type,
+      position: emp.position,
+      hired_at: emp.hired_at,
+      fired_at: emp.fired_at
+    }
+    await employeesApi.createClientEmployee(payload)
+  }
+
+  for (const emp of toUpdate) {
+    await employeesApi.updateClientEmployee(emp.id, {
+      full_name: emp.full_name,
+      citizenship: emp.citizenship,
+      employment_type: emp.employment_type,
+      position: emp.position,
+      hired_at: emp.hired_at,
+      fired_at: emp.fired_at
+    })
+  }
 }
 
 // Обработчик отправки формы
@@ -139,6 +220,7 @@ const handleSubmit = async () => {
 
   try {
     await clientsApi.updateClient(clientId, preparePayload())
+    await saveEmployees(clientId)
     await router.push('/clients')
   } catch {
     error.value = 'Не удалось обновить данные клиента. Пожалуйста, проверьте данные и попробуйте снова.'
@@ -281,6 +363,11 @@ onMounted(loadClient)
             class="w-full"
           />
         </div>
+      </div>
+
+      <!-- Блок сотрудников -->
+      <div class="mt-8 pt-6 border-t">
+        <ClientEmployeesEditor v-model="employees" />
       </div>
 
       <div v-if="error" class="field mb-4">

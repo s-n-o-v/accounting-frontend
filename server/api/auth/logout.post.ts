@@ -1,10 +1,10 @@
-import { proxyRequest } from '../../utils/proxy'
+import { proxyApiRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {
   try {
     // First, try to call the backend logout endpoint if it exists
     try {
-      await proxyRequest(event, '/auth/logout', 'POST')
+      await proxyApiRequest(event, '/auth/logout', 'POST')
     } catch (error) {
       // If backend logout fails, that's okay - we'll still clear our cookie
       console.log('Backend logout failed, but continuing with cookie cleanup:', error)

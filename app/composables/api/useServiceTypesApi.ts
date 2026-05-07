@@ -30,39 +30,39 @@ export const useServiceTypesApi = () => {
     // Получить список типов услуг с пагинацией и фильтрацией
     getServiceTypes: (params?: QueryParams) => {
       const query = buildQuery(params || {})
-      return get<PaginatedResponse<ServiceType>>(`/service-types${query}`)
+      return get<PaginatedResponse<ServiceType>>(`/references/service-types${query}`)
     },
 
     // Получить тип услуги по ID
     getServiceType: (id: number) => {
-      return get<ServiceType>(`/service-types/${id}`)
+      return get<ServiceType>(`/references/service-types/${id}`)
     },
 
     // Создать новый тип услуги
     createServiceType: (data: CreateServiceTypeDto) => {
-      return post<ServiceType>('/service-types', data)
+      return post<ServiceType>('/references/service-types', data)
     },
 
     // Обновить тип услуги
     updateServiceType: (id: number, data: UpdateServiceTypeDto) => {
-      return put<ServiceType>(`/service-types/${id}`, data)
+      return put<ServiceType>(`/references/service-types/${id}`, data)
     },
 
     // Частичное обновление типа услуги
     patchServiceType: (id: number, data: Partial<UpdateServiceTypeDto>) => {
-      return patch<ServiceType>(`/service-types/${id}`, data)
+      return patch<ServiceType>(`/references/service-types/${id}`, data)
     },
 
     // Удалить тип услуги
     deleteServiceType: (id: number) => {
-      return del<{ success: boolean }>(`/service-types/${id}`)
+      return del<{ success: boolean }>(`/references/service-types/${id}`)
     },
 
     // Поиск типов услуг
     searchServiceTypes: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<ServiceType>>(`/service-types/search${queryString}`)
+      return get<PaginatedResponse<ServiceType>>(`/references/service-types${queryString}`)
     }
   }
 }

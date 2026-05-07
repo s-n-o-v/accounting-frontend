@@ -3,7 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useReportTypesApi, type ReportType } from '~/composables/api/useReportTypesApi'
 import type { PaginatedResponse } from '~/types/api/common'
-import { reportPeriod } from './common'
+import { reportPeriod } from '~/utils/directory/report-types'
 
 definePageMeta({
   layout: 'default',

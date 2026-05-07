@@ -67,7 +67,7 @@ export const useIndividualPayeesApi = () => {
     searchIndividualPayees: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<IndividualPayee>>(`/individual-payees/search${queryString}`)
+      return get<PaginatedResponse<IndividualPayee>>(`/individual-payees${queryString}`)
     }
   }
 }

@@ -1,7 +1,5 @@
 // app/composables/api/useClientServicePricesApi.ts
-import { useApi } from './useApi'
 import type {
-  PaginatedResponse,
   QueryParams
 } from '~/types/api/common'
 
@@ -28,55 +26,52 @@ export interface CreateClientServicePriceDto {
 export interface UpdateClientServicePriceDto extends Partial<CreateClientServicePriceDto> {}
 
 export const useClientServicePricesApi = () => {
-  const { get, post, put, patch, delete: del, buildQuery } = useApi()
+  const unsupported = () => Promise.reject(new Error('Backend routes for client-service-prices are not defined in api.php'))
 
   return {
     // Получить список цен услуг для клиентов с пагинацией и фильтрацией
     getClientServicePrices: (params?: QueryParams) => {
-      const query = buildQuery(params || {})
-      return get<PaginatedResponse<ClientServicePrice>>(`/client-service-prices${query}`)
+      return unsupported()
     },
 
     // Получить цену услуги для клиента по ID
     getClientServicePrice: (id: number) => {
-      return get<ClientServicePrice>(`/client-service-prices/${id}`)
+      return unsupported()
     },
 
     // Создать новую цену услуги для клиента
     createClientServicePrice: (data: CreateClientServicePriceDto) => {
-      return post<ClientServicePrice>('/client-service-prices', data)
+      return unsupported()
     },
 
     // Обновить цену услуги для клиента
     updateClientServicePrice: (id: number, data: UpdateClientServicePriceDto) => {
-      return put<ClientServicePrice>(`/client-service-prices/${id}`, data)
+      return unsupported()
     },
 
     // Частичное обновление цены услуги для клиента
     patchClientServicePrice: (id: number, data: Partial<UpdateClientServicePriceDto>) => {
-      return patch<ClientServicePrice>(`/client-service-prices/${id}`, data)
+      return unsupported()
     },
 
     // Удалить цену услуги для клиента
     deleteClientServicePrice: (id: number) => {
-      return del<{ success: boolean }>(`/client-service-prices/${id}`)
+      return unsupported()
     },
 
     // Получить цены услуг для конкретного клиента
     getClientServicePricesByClient: (clientId: number) => {
-      return get<ClientServicePrice[]>(`/clients/${clientId}/service-prices`)
+      return unsupported()
     },
 
     // Получить цены услуг для конкретного типа услуги
     getClientServicePricesByServiceType: (serviceTypeId: number) => {
-      return get<ClientServicePrice[]>(`/service-types/${serviceTypeId}/client-prices`)
+      return unsupported()
     },
 
     // Поиск цен услуг для клиентов
     searchClientServicePrices: (query: string, params?: QueryParams) => {
-      const searchParams = { search: query, ...params }
-      const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<ClientServicePrice>>(`/client-service-prices/search${queryString}`)
+      return unsupported()
     }
   }
 }

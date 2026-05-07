@@ -72,7 +72,7 @@ export const usePaymentAllocationsApi = () => {
     searchPaymentAllocations: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<PaymentAllocation>>(`/payment-allocations/search${queryString}`)
+      return get<PaginatedResponse<PaymentAllocation>>(`/payment-allocations${queryString}`)
     }
   }
 }

@@ -1,6 +1,6 @@
-import { proxyRequest } from '../../utils/proxy'
+import { proxyApiRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {
   // Use the proxy utility to forward the request
-  return proxyRequest(event, '/clients', 'GET')
+  return proxyApiRequest(event, '/clients', 'GET')
 })

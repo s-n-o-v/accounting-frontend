@@ -1,9 +1,9 @@
-import { proxyRequest } from '../../utils/proxy'
+import { proxyApiRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {
   // Extract the ID from the route parameters
   const id = getRouterParam(event, 'id')
   
   // Use the proxy utility to forward the request
-  return proxyRequest(event, `/references/report-types/${id}`, 'GET')
+  return proxyApiRequest(event, `/references/report-types/${id}`, 'GET')
 })

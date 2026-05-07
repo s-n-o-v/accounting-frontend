@@ -62,14 +62,14 @@ export const useBankAccountsApi = () => {
 
     // Получить платежи для банковского счета
     getBankAccountPayments: (bankAccountId: number) => {
-      return get<any[]>(`/bank-accounts/${bankAccountId}/payments`)
+      return Promise.reject(new Error('Backend route /bank-accounts/{id}/payments does not exist'))
     },
 
     // Поиск банковских счетов
     searchBankAccounts: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<BankAccount>>(`/bank-accounts/search${queryString}`)
+      return get<PaginatedResponse<BankAccount>>(`/bank-accounts${queryString}`)
     }
   }
 }

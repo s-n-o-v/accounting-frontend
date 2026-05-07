@@ -69,7 +69,7 @@ export const useDashboardWidgetsApi = () => {
     searchDashboardWidgets: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<DashboardWidget>>(`/dashboard-widgets/search${queryString}`)
+      return get<PaginatedResponse<DashboardWidget>>(`/dashboard-widgets${queryString}`)
     }
   }
 }

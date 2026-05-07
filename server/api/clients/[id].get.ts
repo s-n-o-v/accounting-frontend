@@ -1,6 +1,6 @@
-import { proxyRequest } from '../../utils/proxy'
+import { proxyApiRequest } from '../../utils/proxy'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')
-  return proxyRequest(event, `/clients/${id}`, 'GET')
+  return proxyApiRequest(event, `/clients/${id}`, 'GET')
 })

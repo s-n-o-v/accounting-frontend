@@ -68,29 +68,29 @@ export const usePaymentsApi = () => {
 
     // Получить платежи для конкретного клиента
     getPaymentsByClient: (clientId: number) => {
-      return get<Payment[]>(`/clients/${clientId}/payments`)
+      return Promise.reject(new Error('Backend route /clients/{id}/payments does not exist'))
     },
 
     // Получить платежи для конкретного банковского счета
     getPaymentsByBankAccount: (bankAccountId: number) => {
-      return get<Payment[]>(`/bank-accounts/${bankAccountId}/payments`)
+      return Promise.reject(new Error('Backend route /bank-accounts/{id}/payments does not exist'))
     },
 
     // Получить платежи для конкретного физического лица получателя
     getPaymentsByIndividualPayee: (individualPayeeId: number) => {
-      return get<Payment[]>(`/individual-payees/${individualPayeeId}/payments`)
+      return Promise.reject(new Error('Backend route /individual-payees/{id}/payments does not exist'))
     },
 
     // Получить распределения платежей
     getPaymentAllocations: (paymentId: number) => {
-      return get<any[]>(`/payments/${paymentId}/allocations`)
+      return Promise.reject(new Error('Backend route /payments/{id}/allocations does not exist'))
     },
 
     // Поиск платежей
     searchPayments: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<Payment>>(`/payments/search${queryString}`)
+      return get<PaginatedResponse<Payment>>(`/payments${queryString}`)
     }
   }
 }

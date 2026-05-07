@@ -36,54 +36,54 @@ export const useServicesRenderedApi = () => {
     // Получить список оказанных услуг с пагинацией и фильтрацией
     getServicesRendered: (params?: QueryParams) => {
       const query = buildQuery(params || {})
-      return get<PaginatedResponse<ServiceRendered>>(`/services-rendered${query}`)
+      return get<PaginatedResponse<ServiceRendered>>(`/services${query}`)
     },
 
     // Получить оказанную услугу по ID
     getServiceRendered: (id: number) => {
-      return get<ServiceRendered>(`/services-rendered/${id}`)
+      return get<ServiceRendered>(`/services/${id}`)
     },
 
     // Создать новую оказанную услугу
     createServiceRendered: (data: CreateServiceRenderedDto) => {
-      return post<ServiceRendered>('/services-rendered', data)
+      return post<ServiceRendered>('/services', data)
     },
 
     // Обновить оказанную услугу
     updateServiceRendered: (id: number, data: UpdateServiceRenderedDto) => {
-      return put<ServiceRendered>(`/services-rendered/${id}`, data)
+      return put<ServiceRendered>(`/services/${id}`, data)
     },
 
     // Частичное обновление оказанной услуги
     patchServiceRendered: (id: number, data: Partial<UpdateServiceRenderedDto>) => {
-      return patch<ServiceRendered>(`/services-rendered/${id}`, data)
+      return patch<ServiceRendered>(`/services/${id}`, data)
     },
 
     // Удалить оказанную услугу
     deleteServiceRendered: (id: number) => {
-      return del<{ success: boolean }>(`/services-rendered/${id}`)
+      return del<{ success: boolean }>(`/services/${id}`)
     },
 
     // Получить оказанные услуги для конкретного клиента
     getServicesRenderedByClient: (clientId: number) => {
-      return get<ServiceRendered[]>(`/clients/${clientId}/services-rendered`)
+      return Promise.reject(new Error('Backend route /clients/{id}/services-rendered does not exist'))
     },
 
     // Получить оказанные услуги для конкретного типа услуги
     getServicesRenderedByServiceType: (serviceTypeId: number) => {
-      return get<ServiceRendered[]>(`/service-types/${serviceTypeId}/services-rendered`)
+      return Promise.reject(new Error('Backend route /service-types/{id}/services-rendered does not exist'))
     },
 
     // Получить позиции счетов для оказанной услуги
     getServiceRenderedInvoiceItems: (serviceRenderedId: number) => {
-      return get<any[]>(`/services-rendered/${serviceRenderedId}/invoice-items`)
+      return Promise.reject(new Error('Backend route /services/{id}/invoice-items does not exist'))
     },
 
     // Поиск оказанных услуг
     searchServicesRendered: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<ServiceRendered>>(`/services-rendered/search${queryString}`)
+      return get<PaginatedResponse<ServiceRendered>>(`/services${queryString}`)
     }
   }
 }

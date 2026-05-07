@@ -30,44 +30,44 @@ export const useAgenciesApi = () => {
     // Получить список агентств с пагинацией и фильтрацией
     getAgencies: (params?: QueryParams) => {
       const query = buildQuery(params || {})
-      return get<PaginatedResponse<Agency>>(`/agencies${query}`)
+      return get<PaginatedResponse<Agency>>(`/references/agencies${query}`)
     },
 
     // Получить агентство по ID
     getAgency: (id: number) => {
-      return get<Agency>(`/agencies/${id}`)
+      return get<Agency>(`/references/agencies/${id}`)
     },
 
     // Создать новое агентство
     createAgency: (data: CreateAgencyDto) => {
-      return post<Agency>('/agencies', data)
+      return post<Agency>('/references/agencies', data)
     },
 
     // Обновить агентство
     updateAgency: (id: number, data: UpdateAgencyDto) => {
-      return put<Agency>(`/agencies/${id}`, data)
+      return put<Agency>(`/references/agencies/${id}`, data)
     },
 
     // Частичное обновление агентства
     patchAgency: (id: number, data: Partial<UpdateAgencyDto>) => {
-      return patch<Agency>(`/agencies/${id}`, data)
+      return patch<Agency>(`/references/agencies/${id}`, data)
     },
 
     // Удалить агентство
     deleteAgency: (id: number) => {
-      return del<{ success: boolean }>(`/agencies/${id}`)
+      return del<{ success: boolean }>(`/references/agencies/${id}`)
     },
 
     // Получить клиентов агентства
     getAgencyClients: (agencyId: number) => {
-      return get<any[]>(`/agencies/${agencyId}/clients`)
+      return Promise.reject(new Error('Backend route /agencies/{id}/clients does not exist'))
     },
 
     // Поиск агентств
     searchAgencies: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<Agency>>(`/agencies/search${queryString}`)
+      return get<PaginatedResponse<Agency>>(`/references/agencies${queryString}`)
     }
   }
 }

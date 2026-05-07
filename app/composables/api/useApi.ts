@@ -4,11 +4,8 @@ import type { ApiError, ApiRequestOptions } from '~/types/api/common'
 export const useApi = () => {
   const config = useRuntimeConfig()
 
-  // Базовый URL из конфигурации
-  // В разработке используем наш сервер как прокси, в продакшене - прямой вызов
-  const baseURL = import.meta.env.DEV
-    ? '/api'  // Используем наш Nuxt сервер как прокси
-    : config.public.apiBaseUrl || 'http://localhost:8000/api'
+  // Всегда идем через Nuxt server API proxy, чтобы dev/prod использовали одинаковые маршруты.
+  const baseURL = '/api'
 
   // Создаём экземпляр $fetch с настройками
   const $api = $fetch.create({

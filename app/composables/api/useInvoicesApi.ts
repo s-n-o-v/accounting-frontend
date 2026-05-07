@@ -72,24 +72,24 @@ export const useInvoicesApi = () => {
 
     // Получить счета для конкретного клиента
     getInvoicesByClient: (clientId: number) => {
-      return get<Invoice[]>(`/clients/${clientId}/invoices`)
+      return Promise.reject(new Error('Backend route /clients/{id}/invoices does not exist'))
     },
 
     // Получить позиции счета
     getInvoiceItems: (invoiceId: number) => {
-      return get<any[]>(`/invoices/${invoiceId}/items`)
+      return Promise.reject(new Error('Backend route /invoices/{id}/items does not exist'))
     },
 
     // Получить распределения платежей для счета
     getInvoicePaymentAllocations: (invoiceId: number) => {
-      return get<any[]>(`/invoices/${invoiceId}/payment-allocations`)
+      return Promise.reject(new Error('Backend route /invoices/{id}/payment-allocations does not exist'))
     },
 
     // Поиск счетов
     searchInvoices: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<Invoice>>(`/invoices/search${queryString}`)
+      return get<PaginatedResponse<Invoice>>(`/invoices${queryString}`)
     }
   }
 }

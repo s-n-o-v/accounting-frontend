@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useReportTypesApi } from '~/composables/api/useReportTypesApi'
 import { useAgenciesApi, type Agency } from '~/composables/api/useAgenciesApi'
-import { periodicityOptions } from './common'
+import { periodicityOptions } from '~/utils/directory/report-types'
 
 definePageMeta({
   layout: 'default',

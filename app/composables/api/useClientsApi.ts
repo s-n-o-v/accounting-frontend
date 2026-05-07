@@ -89,7 +89,7 @@ export const useClientsApi = () => {
     searchClients: (query: string, params?: QueryParams) => {
       const searchParams = { search: query, ...params }
       const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<Client>>(`/clients/search${queryString}`)
+      return get<PaginatedResponse<Client>>(`/clients${queryString}`)
     }
   }
 }

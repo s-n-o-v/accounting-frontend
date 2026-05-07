@@ -1,7 +1,5 @@
 // app/composables/api/useClientSubscriptionPricesApi.ts
-import { useApi } from './useApi'
 import type {
-  PaginatedResponse,
   QueryParams
 } from '~/types/api/common'
 
@@ -26,50 +24,47 @@ export interface CreateClientSubscriptionPriceDto {
 export interface UpdateClientSubscriptionPriceDto extends Partial<CreateClientSubscriptionPriceDto> {}
 
 export const useClientSubscriptionPricesApi = () => {
-  const { get, post, put, patch, delete: del, buildQuery } = useApi()
+  const unsupported = () => Promise.reject(new Error('Backend routes for client-subscription-prices are not defined in api.php'))
 
   return {
     // Получить список цен абонентского обслуживания для клиентов с пагинацией и фильтрацией
     getClientSubscriptionPrices: (params?: QueryParams) => {
-      const query = buildQuery(params || {})
-      return get<PaginatedResponse<ClientSubscriptionPrice>>(`/client-subscription-prices${query}`)
+      return unsupported()
     },
 
     // Получить цену абонентского обслуживания для клиента по ID
     getClientSubscriptionPrice: (id: number) => {
-      return get<ClientSubscriptionPrice>(`/client-subscription-prices/${id}`)
+      return unsupported()
     },
 
     // Создать новую цену абонентского обслуживания для клиента
     createClientSubscriptionPrice: (data: CreateClientSubscriptionPriceDto) => {
-      return post<ClientSubscriptionPrice>('/client-subscription-prices', data)
+      return unsupported()
     },
 
     // Обновить цену абонентского обслуживания для клиента
     updateClientSubscriptionPrice: (id: number, data: UpdateClientSubscriptionPriceDto) => {
-      return put<ClientSubscriptionPrice>(`/client-subscription-prices/${id}`, data)
+      return unsupported()
     },
 
     // Частичное обновление цены абонентского обслуживания для клиента
     patchClientSubscriptionPrice: (id: number, data: Partial<UpdateClientSubscriptionPriceDto>) => {
-      return patch<ClientSubscriptionPrice>(`/client-subscription-prices/${id}`, data)
+      return unsupported()
     },
 
     // Удалить цену абонентского обслуживания для клиента
     deleteClientSubscriptionPrice: (id: number) => {
-      return del<{ success: boolean }>(`/client-subscription-prices/${id}`)
+      return unsupported()
     },
 
     // Получить цены абонентского обслуживания для конкретного клиента
     getClientSubscriptionPricesByClient: (clientId: number) => {
-      return get<ClientSubscriptionPrice[]>(`/clients/${clientId}/subscription-prices`)
+      return unsupported()
     },
 
     // Поиск цен абонентского обслуживания для клиентов
     searchClientSubscriptionPrices: (query: string, params?: QueryParams) => {
-      const searchParams = { search: query, ...params }
-      const queryString = buildQuery(searchParams)
-      return get<PaginatedResponse<ClientSubscriptionPrice>>(`/client-subscription-prices/search${queryString}`)
+      return unsupported()
     }
   }
 }
