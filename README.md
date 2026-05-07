@@ -1,75 +1,48 @@
-# Nuxt Minimal Starter
+# Accounting Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Фронтенд-система помощи и напоминаний для бухгалтера или бухгалтерской компании.
 
-## Setup
+## Что это за проект
 
-Make sure to install dependencies:
+Этот проект помогает:
+
+- вести клиентскую бухгалтерию в едином интерфейсе;
+- фиксировать отчеты, закрепленные за каждым клиентом;
+- напоминать о сроках подачи отчетности;
+- вести учет работ по каждому клиенту в разрезе оказываемых услуг и задач.
+
+По сути это рабочее место бухгалтера/бухгалтерской конторы, где собрана оперативная информация по клиентам, срокам и выполненным работам.
+
+## Технологии
+
+- Nuxt 4
+- Vue 3
+- Pinia
+- PrimeVue
+- TailwindCSS
+
+## Запуск
+
+Установка зависимостей:
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Режим разработки:
 
 ```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+Сборка production:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
 ```
 
-Locally preview production build:
+Локальный preview production-сборки:
 
 ```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
